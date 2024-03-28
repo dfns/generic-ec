@@ -54,6 +54,16 @@ mod laws {
         Point::from_raw_unchecked(result)
     }
 
+    /// If $A$ is a valid `Point<E>`, then $A + A$ is a valid `Point<E>`
+    ///
+    /// The proof is the same as for [`sum_of_points_is_valid_point`], just put `B=A`
+    #[inline]
+    pub fn double_point_is_valid_point<E: Curve>(x: &Point<E>) -> Point<E> {
+        let result = Additive::double(x.as_raw());
+        // Correctness: refer to doc comment of the function
+        Point::from_raw_unchecked(result)
+    }
+
     /// If $A$ is valid `Point<E>`, then $A + G$ is valid `Point<E>`
     #[inline]
     pub fn sum_of_point_and_generator_is_valid_point<E: Curve>(
@@ -513,6 +523,15 @@ impl_op_assign! {
     NonZero<Point<E>>, MulAssign, NonZero<SecretScalar<E>>, mul_assign, *,
     NonZero<Scalar<E>>, MulAssign, NonZero<Scalar<E>>, mul_assign, *,
     NonZero<Scalar<E>>, MulAssign, NonZero<SecretScalar<E>>, mul_assign, *,
+}
+
+impl<E: Curve> Point<E> {
+    /// Doubles the point, returns `self + self`
+    ///
+    /// `point.double()` may be more efficient than `point + point` or `2 * point`
+    pub fn double(&self) -> Self {
+        laws::double_point_is_valid_point(self)
+    }
 }
 
 #[cfg(test)]

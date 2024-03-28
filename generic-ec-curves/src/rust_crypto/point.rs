@@ -27,6 +27,11 @@ impl<E: CurveArithmetic> Additive for RustCryptoPoint<E> {
     fn negate(x: &Self) -> Self {
         RustCryptoPoint(-x.0)
     }
+
+    #[inline]
+    fn double(x: &Self) -> Self {
+        RustCryptoPoint(x.0.double())
+    }
 }
 
 impl<E: CurveArithmetic> From<CurveGenerator> for RustCryptoPoint<E> {

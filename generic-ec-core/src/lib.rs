@@ -70,6 +70,16 @@ pub trait Additive {
     fn add(a: &Self, b: &Self) -> Self;
     fn sub(a: &Self, b: &Self) -> Self;
     fn negate(x: &Self) -> Self;
+
+    /// Takes `x`, returns `x + x`
+    ///
+    /// This can be more efficient than calling [`Self::add(x, x)`](Self::add)
+    fn double(x: &Self) -> Self
+    where
+        Self: Sized,
+    {
+        Self::add(x, x)
+    }
 }
 
 pub trait Multiplicative<Rhs> {
